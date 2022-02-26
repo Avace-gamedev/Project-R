@@ -6,10 +6,13 @@ using UnityEngine;
 /// </summary>
 public class Main : MonoBehaviour
 {
+    static Main()
+    {
+        Avace.Backend.Main.Initialize();   
+    }
+    
     private void Awake()
     {
-        Avace.Backend.Main.Initialize();
-        
         InputManager.LoadCallbacks();
     }
 }
