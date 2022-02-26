@@ -1,3 +1,4 @@
+using Input;
 using UnityEngine;
 
 /// <summary>
@@ -8,5 +9,7 @@ public class Main : MonoBehaviour
     private void Awake()
     {
         Avace.Backend.Main.Initialize();
+        
+        InputManager.LoadCallbacks();
     }
 }

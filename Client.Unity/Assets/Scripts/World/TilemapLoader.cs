@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Avace.Backend.Interfaces.Map;
 using Avace.Backend.Kernel.Injection;
-using Avace.Backend.Map;
 using Configuration;
 using Extensions;
 using UnityEngine;
@@ -48,20 +47,26 @@ namespace World
 
         private void CreateTilemaps()
         {
-            string[] layers = _map.Layers.ToArray();
-            for (int i = 0; i < layers.Length; i++)
+            // Layer with order 0 is the player's layer
+            
+            MapLayer[] layers = _map.Layers.ToArray();
+            foreach (MapLayer layer in layers)
             {
-                string layerName = layers[i];
-
-                GameObject tilemapObject = gameObject.CreateChildWithComponents($"Tilemap_{layerName}", typeof(Tilemap), typeof(TilemapRenderer));
-                tilemapObject.transform.position = new Vector3(0, 0, -(float)i / 10);
+                GameObject tilemapObject = gameObject.CreateChildWithComponents($"Tilemap_{layer.Name}", typeof(Tilemap), typeof(TilemapRenderer));
+                tilemapObject.transform.position = layer.Order == 0 ? new Vector3(0, 0, -(float)layer.Order / 1000) : Vector3.zero;
 
                 TilemapRenderer tilemapRenderer = tilemapObject.GetComponent<TilemapRenderer>();
                 tilemapRenderer.mode = TilemapRenderer.Mode.Individual;
+                tilemapRenderer.sortingOrder = layer.Order;
+
+                if (layer.Collision)
+                {
+                    tilemapObject.AddComponent<TilemapCollider2D>();
+                }
 
                 Tilemap tilemap = tilemapObject.GetComponent<Tilemap>();
 
-                _tilemaps.Add(layerName, tilemap);
+                _tilemaps.Add(layer.Name, tilemap);
             }
         }
 

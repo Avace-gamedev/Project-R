@@ -43,6 +43,15 @@ public static class Injector
         _kernel!.Bind<TInterface>().To<TType>();
     }
 
+    /// <summary>
+    /// Bind a type to a specific value.
+    /// </summary>
+    public static void BindSingleton<TType>(TType singleton)
+    {
+        CheckKernelIsInitialized();
+        _kernel!.Bind<TType>().ToConstant(singleton);
+    }
+
     private static void CheckKernelIsInitialized()
     {
         if (_kernel == null)
