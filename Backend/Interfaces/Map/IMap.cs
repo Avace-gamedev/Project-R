@@ -7,7 +7,7 @@ public interface IMap
     int Width { get; }
     int Height { get; }
         
-    IEnumerable<string> Layers { get; }
+    IEnumerable<MapLayer> Layers { get; }
 
     int? GetTerrainAt(int x, int y, string layer);
 }

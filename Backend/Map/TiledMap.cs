@@ -11,9 +11,10 @@ internal class TiledMap : IMap
 {
     public int Width { get; private set; }
     public int Height { get; private set; }
-    public List<string> Layers { get; } = new();
+    public List<MapLayer> Layers { get; } = new();
     public Dictionary<string, int?[]> LayerTiles { get; } = new();
-    IEnumerable<string> IMap.Layers => Layers;
+
+    IEnumerable<MapLayer> IMap.Layers => Layers;
 
     public TiledMap(int width, int height)
     {
@@ -25,7 +26,7 @@ internal class TiledMap : IMap
     {
         int?[] layerTiles = GetLayer(layer);
         int index = CoordsToIndex(x, y);
-        
+
         return layerTiles[index];
     }
 
@@ -53,7 +54,7 @@ internal class TiledMap : IMap
     {
         if (!File.Exists(path))
         {
-            throw MakeParseException(path , "File not found");
+            throw MakeParseException(path, "File not found");
         }
 
         string extension = Path.GetExtension(path);
@@ -84,12 +85,14 @@ internal class TiledMap : IMap
             {
                 string layerName = GetAttributeValue(layer, "name");
 
-                if (result.Layers.Contains(layerName))
+                if (result.Layers.Any(l => l.Name == layerName))
                 {
                     throw new InvalidOperationException($"Layer with name {layerName} already exists");
                 }
 
-
+                int layerOrder = GetPropertyValueAsInt(layer, "layer-order");
+                bool collision = GetPropertyValueAsBool(layer, "collision");
+                
                 string layerData = GetChildContent(layer, "data");
                 int?[] tiles = layerData.Split(',')
                     .Select(t => t.Trim())
@@ -99,8 +102,8 @@ internal class TiledMap : IMap
                             : throw new InvalidOperationException($"Could not convert tile to int: {t}"))
                     .Select(i => i < firstGid ? (int?)null : i - firstGid)
                     .ToArray();
-                
-                result.Layers.Add(layerName);
+
+                result.Layers.Add(new MapLayer(layerName, layerOrder, collision));
                 result.LayerTiles.Add(layerName, tiles);
             }
 
@@ -120,8 +123,13 @@ internal class TiledMap : IMap
 
     private static string GetAttributeValue(XElement element, string attribute)
     {
-        return element.Attribute(attribute)?.Value
+        return TryGetAttributeValue(element, attribute)
                ?? throw new InvalidOperationException($"Could not find attribute '{attribute}' on element <{element.Name}>");
+    }
+
+    private static string? TryGetAttributeValue(XElement element, string attribute)
+    {
+        return element.Attribute(attribute)?.Value;
     }
 
     private static int GetAttributeValueAsInt(XElement element, string attribute)
@@ -134,6 +142,45 @@ internal class TiledMap : IMap
         }
 
         return attrInt;
+    }
+
+    private static string GetPropertyValue(XElement element, string property)
+    {
+        return TryGetPropertyValue(element, property)
+               ?? throw new InvalidOperationException($"Could not find element property with name {property}");
+    }
+
+    private static string? TryGetPropertyValue(XElement element, string property)
+    {
+        XElement? properties = element.Element("properties");
+        if (properties == null)
+        {
+            return null;
+        }
+
+        return properties.Elements("property")
+            .Where(propertyElement => TryGetAttributeValue(propertyElement, "name") == property)
+            .Select(propertyElement => TryGetAttributeValue(propertyElement, "value"))
+            .FirstOrDefault();
+    }
+
+    private static int GetPropertyValueAsInt(XElement element, string property)
+    {
+        string propStr = GetPropertyValue(element, property);
+
+        if (!int.TryParse(propStr, out int propInt))
+        {
+            throw new InvalidOperationException($"Could not convert value to int: {propStr}");
+        }
+
+        return propInt;
+    }
+
+    private static bool GetPropertyValueAsBool(XElement element, string property, bool defaultIfNotFound = false)
+    {
+        string? propStr = TryGetPropertyValue(element, property);
+
+        return !string.IsNullOrEmpty(propStr) && bool.TryParse(propStr, out bool propBool) ? propBool : defaultIfNotFound;
     }
 
     private static Exception MakeParseException(string path, string message)

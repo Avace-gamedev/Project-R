@@ -22,11 +22,6 @@
 
     <ItemGroup>
       <PackageReference Include="Ninject" Version="3.3.4" />
+      <PackageReference Include="StronglyTypedId" Version="0.2.1" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Interfaces" />
-      <Folder Include="Ressources" />
-    </ItemGroup>
-
 </Project>
