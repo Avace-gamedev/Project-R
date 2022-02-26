@@ -13,21 +13,28 @@ namespace World
     /// <summary>
     /// This should be attached to a grid. It will load at initialization the map provided by the bound IMapProvider.
     /// </summary>
-    public class TilemapLoader : MonoBehaviour
+    public class TilemapLoader : MonoBehaviour, IPlayerStartPositionProvider, ICoordinatesConverter
     {
         public TilemapConfiguration configuration;
+        public Vector2Int PlayerStartPosition { get; private set; }
 
         private IMap _map;
+        private Grid _grid;
         private readonly Dictionary<string, Tilemap> _tilemaps = new Dictionary<string, Tilemap>();
 
-        private void Start()
+
+        private void Awake()
         {
+            Injector.BindSingleton<IPlayerStartPositionProvider>(this);
+            Injector.BindSingleton<ICoordinatesConverter>(this);
+            
             if (configuration == null)
             {
                 throw new InvalidOperationException($"Provided {nameof(TilemapConfiguration)} is null.");
             }
 
-            if (GetComponent<Grid>() == null)
+            _grid = gameObject.GetComponent<Grid>();
+            if (_grid == null)
             {
                 throw new InvalidOperationException("Expected game object to have a grid component");
             }
@@ -40,6 +47,8 @@ namespace World
             }
 
             _map = tilemapProvider.Get();
+
+            PlayerStartPosition = new Vector2Int(_map.PlayerSpawn.X, _map.Height - _map.PlayerSpawn.Y);
 
             CreateTilemaps();
             ClearAndFillTilemaps();
@@ -93,6 +102,17 @@ namespace World
         private TileBase TerrainTypeToTile(int? terrain)
         {
             return terrain.HasValue && terrain.Value > 0 && terrain.Value < configuration.tiles.Count ? configuration.tiles[terrain.Value] : null;
+        }
+
+        public Vector3 Convert(Vector2Int cell)
+        {
+            Debug.Log(cell);
+            return _grid.CellToWorld((Vector3Int)cell);
+        }
+
+        public Vector2Int Convert(Vector3 world)
+        {
+            return (Vector2Int)_grid.WorldToCell(world);
         }
     }
 }

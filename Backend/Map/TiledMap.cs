@@ -1,20 +1,29 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Numerics;
+using System.Reflection;
 using System.Xml.Linq;
+using Avace.Backend.Interfaces.Logging;
 using Avace.Backend.Interfaces.Map;
+using Avace.Backend.Interfaces.Math;
+using Avace.Backend.Kernel.Injection;
 
 namespace Avace.Backend.Map;
 
 internal class TiledMap : IMap
 {
+    private static readonly ILogger Log = Injector.Get<ILoggerProvider>().GetLogger(MethodBase.GetCurrentMethod().Name);
+
     public int Width { get; private set; }
     public int Height { get; private set; }
+    IEnumerable<MapLayer> IMap.Layers => Layers;
+    public Vector2Int PlayerSpawn { get; private set; }
+
     public List<MapLayer> Layers { get; } = new();
     public Dictionary<string, int?[]> LayerTiles { get; } = new();
-
-    IEnumerable<MapLayer> IMap.Layers => Layers;
 
     public TiledMap(int width, int height)
     {
@@ -74,8 +83,10 @@ internal class TiledMap : IMap
         {
             int width = GetAttributeValueAsInt(doc.Root, "width");
             int height = GetAttributeValueAsInt(doc.Root, "height");
+            int tileWidth = GetAttributeValueAsInt(doc.Root, "tilewidth");
+            int tileHeight = GetAttributeValueAsInt(doc.Root, "tileheight");
 
-            TiledMap result = new TiledMap(width, height);
+            TiledMap result = new(width, height);
 
             XElement tileset = doc.Root.Element("tileset") ?? throw new InvalidOperationException("Could not find tag <tileset>");
 
@@ -83,28 +94,12 @@ internal class TiledMap : IMap
 
             foreach (XElement layer in doc.Root.Elements("layer"))
             {
-                string layerName = GetAttributeValue(layer, "name");
+                ParseLayer(layer, result, firstGid);
+            }
 
-                if (result.Layers.Any(l => l.Name == layerName))
-                {
-                    throw new InvalidOperationException($"Layer with name {layerName} already exists");
-                }
-
-                int layerOrder = GetPropertyValueAsInt(layer, "layer-order");
-                bool collision = GetPropertyValueAsBool(layer, "collision");
-                
-                string layerData = GetChildContent(layer, "data");
-                int?[] tiles = layerData.Split(',')
-                    .Select(t => t.Trim())
-                    .Select(t =>
-                        int.TryParse(t, out int i)
-                            ? i
-                            : throw new InvalidOperationException($"Could not convert tile to int: {t}"))
-                    .Select(i => i < firstGid ? (int?)null : i - firstGid)
-                    .ToArray();
-
-                result.Layers.Add(new MapLayer(layerName, layerOrder, collision));
-                result.LayerTiles.Add(layerName, tiles);
+            foreach (XElement objectGroup in doc.Root.Elements("objectgroup"))
+            {
+                ParseObjectGroup(objectGroup, result, tileWidth, tileHeight);
             }
 
             return result;
@@ -112,6 +107,55 @@ internal class TiledMap : IMap
         catch (InvalidOperationException e)
         {
             throw MakeParseException(path, e.Message);
+        }
+    }
+
+    private static void ParseLayer(XElement layer, TiledMap result, int firstGid)
+    {
+        string layerName = GetAttributeValue(layer, "name");
+
+        if (result.Layers.Any(l => l.Name == layerName))
+        {
+            throw new InvalidOperationException($"Layer with name {layerName} already exists");
+        }
+
+        int layerOrder = GetPropertyValueAsInt(layer, "layer-order");
+        bool collision = GetPropertyValueAsBool(layer, "collision");
+
+        string layerData = GetChildContent(layer, "data");
+        int?[] tiles = layerData.Split(',')
+            .Select(t => t.Trim())
+            .Select(t =>
+                int.TryParse(t, out int i)
+                    ? i
+                    : throw new InvalidOperationException($"Could not convert tile to int: {t}"))
+            .Select(i => i < firstGid ? (int?)null : i - firstGid)
+            .ToArray();
+
+        result.Layers.Add(new MapLayer(layerName, layerOrder, collision));
+        result.LayerTiles.Add(layerName, tiles);
+    }
+
+    private static void ParseObjectGroup(XElement objectGroup, TiledMap result, int tileWidth, int tileHeight)
+    {
+        foreach (XElement obj in objectGroup.Elements("object"))
+        {
+            string? name = TryGetAttributeValue(obj, "name");
+            switch (name)
+            {
+                case "player":
+                    double x = GetAttributeValueAsDouble(obj, "x");
+                    double y = GetAttributeValueAsDouble(obj, "y");
+
+                    result.PlayerSpawn = new Vector2Int((int)(x / tileWidth), (int)(y / tileHeight));
+                    break;
+                case null:
+                    Log.Warn($"Found object with no name attribute: {obj}");
+                    break;
+                default:
+                    Log.Warn($"Object with name {name} ignored.");
+                    break;
+            }
         }
     }
 
@@ -142,6 +186,18 @@ internal class TiledMap : IMap
         }
 
         return attrInt;
+    }
+
+    private static double GetAttributeValueAsDouble(XElement element, string attribute)
+    {
+        string attrStr = GetAttributeValue(element, attribute);
+
+        if (!double.TryParse(attrStr, NumberStyles.Float, CultureInfo.InvariantCulture, out double attrDouble))
+        {
+            throw new InvalidOperationException($"Could not convert value to double: {attrStr}");
+        }
+
+        return attrDouble;
     }
 
     private static string GetPropertyValue(XElement element, string property)
