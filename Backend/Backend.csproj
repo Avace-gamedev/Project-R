@@ -17,12 +17,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Backend.Interfaces\Backend.Interfaces.csproj" />
       <ProjectReference Include="..\Backend.Kernel\Backend.Kernel.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Ninject" Version="3.3.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Interfaces" />
+      <Folder Include="Ressources" />
     </ItemGroup>
 
 </Project>
