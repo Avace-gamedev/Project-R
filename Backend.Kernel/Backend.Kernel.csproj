@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net46</TargetFramework>
+        <AssemblyName>Avace.Backend.Kernel</AssemblyName>
+        <RootNamespace>Avace.Backend.Kernel</RootNamespace>
+        <LangVersion>10</LangVersion>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <OutputPath>../bin/Debug</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <OutputPath>../bin/Release</OutputPath>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="Ninject" Version="3.3.4" />
+    </ItemGroup>
+
+</Project>

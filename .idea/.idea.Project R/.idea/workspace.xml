@@ -2,16 +2,43 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3071c809-9cf4-4ab6-8c36-c59625546753" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/.gitignore.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend.Interfaces/Logging/ILogger.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend.Interfaces/Logging/ILoggerProvider.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend.Interfaces/Map/TerrainType.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Client.Unity/Assets/Scripts/InjectionBindings.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Client.Unity/Assets/Scripts/Logging/UnityLogger.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Client.Unity/Assets/Scripts/Logging/UnityLoggerProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Project R/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Project R/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client.Unity/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Client.Unity/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client.Unity/Assets/Scripts/Test.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client.Unity/Assets/Scripts/Test.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client.Unity/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Client.Unity/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/../GenericTopDownIsoTacticalRPG/Backend/Game/World/Map/MapLayer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../GenericTopDownIsoTacticalRPG/Backend/Game/World/Map/Map.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Backend.Kernel/obj/Release/net46/Backend.Kernel.GlobalUsings.g.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/lahki/unity/Project R/Client.Unity/Assets/Scripts/Test.cs.meta" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../GenericTopDownIsoTacticalRPG/Assets/Scripts/World/TilemapManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Backend/obj/Debug/net6.0/.NETCoreApp,Version=v6.0.AssemblyAttributes.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/73ffe226ca516698d1e28a7fe1cac5a27b5b81ccdcdc89f189e51b14c9d4c/AbstractValidator.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../GenericTopDownIsoTacticalRPG/Backend/Kernel/Lifecycle/AppLifecycle.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7c333b3ba5aa9a253e19585ec71ff6f2730ee768d389b5baeb74542b65ce1/DefaultValidatorExtensions_Validate.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../GenericTopDownIsoTacticalRPG/Assets/Scripts/Lifecycle/LifecycleTriggerer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../GenericTopDownIsoTacticalRPG/Backend/Kernel/Logging/ILoggerProvider.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -30,7 +57,11 @@
     <property name="rider.run.widget.enabled.cache" value="false" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
-  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
+  <component name="RunManager" selected="Publish to folder.Publish ">
+    <configuration name="Publish " type="DotNetFolderPublish" factoryName="Publish to folder">
+      <riderPublish configuration="Release" platform="Any CPU" runtime="Portable" target_folder="$PROJECT_DIR$/Client.Unity/Assets/External/Backend" target_framework="net6.0" uuid_high="-2463217857666465022" uuid_low="-6234724132055910233" />
+      <method v="2" />
+    </configuration>
     <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
@@ -51,6 +82,11 @@
       </option>
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Attach to Unity Editor.Attach to Unity Editor" />
+      <item itemvalue="Attach to Unity Editor.Attach to Unity Editor &amp; Play" />
+      <item itemvalue="Publish to folder.Publish " />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
