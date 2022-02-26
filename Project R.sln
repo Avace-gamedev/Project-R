@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.csproj", "{DDD0E468-BD64-4302-A979-CF6F544078A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Interfaces", "Backend.Interfaces\Backend.Interfaces.csproj", "{52D60974-E3BF-4E33-BB45-22A6C8ADD61F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Kernel", "Backend.Kernel\Backend.Kernel.csproj", "{44310866-F490-4FE9-8E0B-E4338F73F1B7}"
 EndProject
 Global
@@ -16,10 +14,6 @@ Global
 		{DDD0E468-BD64-4302-A979-CF6F544078A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDD0E468-BD64-4302-A979-CF6F544078A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDD0E468-BD64-4302-A979-CF6F544078A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{52D60974-E3BF-4E33-BB45-22A6C8ADD61F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{52D60974-E3BF-4E33-BB45-22A6C8ADD61F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{52D60974-E3BF-4E33-BB45-22A6C8ADD61F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{52D60974-E3BF-4E33-BB45-22A6C8ADD61F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{44310866-F490-4FE9-8E0B-E4338F73F1B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{44310866-F490-4FE9-8E0B-E4338F73F1B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44310866-F490-4FE9-8E0B-E4338F73F1B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
