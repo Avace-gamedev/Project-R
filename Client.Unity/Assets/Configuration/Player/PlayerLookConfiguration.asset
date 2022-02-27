@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edf5056a185e46e2815ada1fa3dc4709, type: 3}
+  m_Name: PlayerLookConfiguration
+  m_EditorClassIdentifier: 
+  spriteSheet: {fileID: 2800000, guid: 78cf315ad2c94374fbfb4e80c8658eac, type: 3}
+  spriteSize: {x: 64, y: 64}
+  pivot: {x: 0.5, y: 0}
+  animationSpeedModifier: 1
+  frameRate: 16
