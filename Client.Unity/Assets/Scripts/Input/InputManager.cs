@@ -17,9 +17,9 @@ namespace Input
         /// <summary>
         /// These callbacks are set by Register
         /// </summary>
-        private static readonly Dictionary<InputType, Dictionary<InputManagerCallbackId, Action<InputAction.CallbackContext>>> RegisteredCallbacks =
+        private static readonly Dictionary<InputType, Dictionary<InputManagerCallbackId, Action<InputValue>>> RegisteredCallbacks =
             new
-                Dictionary<InputType, Dictionary<InputManagerCallbackId, Action<InputAction.CallbackContext>>>();
+                Dictionary<InputType, Dictionary<InputManagerCallbackId, Action<InputValue>>>();
 
         public static void LoadCallbacks()
         {
@@ -48,51 +48,45 @@ namespace Input
             }
         }
 
-        public static void Trigger(InputType inputType, InputAction.CallbackContext arg)
+        public static void Trigger(InputValue arg)
         {
-            if (StaticCallbacks.ContainsKey(inputType))
+            if (StaticCallbacks.ContainsKey(arg.Type))
             {
-                foreach (MethodInfo method in StaticCallbacks[inputType])
+                foreach (MethodInfo method in StaticCallbacks[arg.Type])
                 {
                     method.Invoke(null, new object[] { arg });
                 }
             }
 
-            if (RegisteredCallbacks.ContainsKey(inputType))
+            if (RegisteredCallbacks.ContainsKey(arg.Type))
             {
-                foreach (Action<InputAction.CallbackContext> action in RegisteredCallbacks[inputType].Values)
+                foreach (Action<InputValue> action in RegisteredCallbacks[arg.Type].Values)
                 {
                     action.Invoke(arg);
                 }
             }
         }
 
-        public static InputManagerCallbackId Register(InputType inputType, Action<InputAction.CallbackContext> callback)
+        public static InputManagerCallbackId Register<T>(InputType inputType, Action<T> callback) where T : InputValue
         {
             if (!RegisteredCallbacks.ContainsKey(inputType))
             {
-                RegisteredCallbacks.Add(inputType, new Dictionary<InputManagerCallbackId, Action<InputAction.CallbackContext>>());
+                RegisteredCallbacks.Add(inputType, new Dictionary<InputManagerCallbackId, Action<InputValue>>());
             }
 
             InputManagerCallbackId id = new InputManagerCallbackId();
-            RegisteredCallbacks[inputType].Add(id, callback);
+            RegisteredCallbacks[inputType].Add(id, (Action<InputValue>)callback);
 
             return id;
         }
 
-        public static void Unregister(InputType inputType, InputManagerCallbackId id)
+        public static void Unregister(InputManagerCallbackId id)
         {
-            if (!RegisteredCallbacks.ContainsKey(inputType))
+            foreach (InputType type in RegisteredCallbacks.Keys.Where(type => RegisteredCallbacks[type].ContainsKey(id)))
             {
+                RegisteredCallbacks[type].Remove(id);
                 return;
             }
-
-            if (!RegisteredCallbacks[inputType].ContainsKey(id))
-            {
-                return;
-            }
-
-            RegisteredCallbacks[inputType].Remove(id);
         }
     }
 

@@ -7,7 +7,16 @@ namespace Input
     {
         public void OnMove(InputAction.CallbackContext context)
         {
-            InputManager.Trigger(InputType.Move, context);
+            Vector2 direction = context.ReadValue<Vector2>();
+            InputManager.Trigger(new MoveInput(direction));
+        }
+
+        public void OnZoom(InputAction.CallbackContext context)
+        {
+            
+            float diff = context.ReadValue<float>();
+            Debug.Log(diff);
+            InputManager.Trigger(new CameraZoomInput(diff));
         }
     }
 }

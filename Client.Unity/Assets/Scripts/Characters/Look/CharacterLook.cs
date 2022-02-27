@@ -58,11 +58,6 @@ namespace Characters.Look
             Rect rect = Rect.MinMaxRect(0, 0, characterLookConfiguration.spriteSheet.width, characterLookConfiguration.spriteSheet.height);
             _renderer.sprite = Sprite.Create(characterLookConfiguration.spriteSheet, rect, characterLookConfiguration.pivot, rect.width, 0,
                 SpriteMeshType.FullRect);
-            if (_renderer.sprite.packingMode != SpritePackingMode.Rectangle)
-            {
-                _log.Warn("Sprite packing mode is not set to Rectangle");
-            }
-
             _renderer.material = new Material(GlobalConstants.TextureMapShader);
             _renderer.material.SetVector(TileSizeShaderProperty, (Vector2)characterLookConfiguration.spriteSize);
 
