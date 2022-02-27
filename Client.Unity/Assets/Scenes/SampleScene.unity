@@ -284,6 +284,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 930a3da6-5e53-4e35-bd79-ce6aee3a4fee
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 213663927}
+        m_TargetAssemblyTypeName: Input.InputBroadcaster, Assembly-CSharp
+        m_MethodName: OnZoom
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: dfd35cfc-b33a-40dc-919b-fa964dece690
+    m_ActionName: Player/Zoom[/Mouse/scroll]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -698,6 +714,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   configuration: {fileID: 11400000, guid: 42ca905f6a81d114d8bb27f2a88aece0, type: 2}
+  initialState: 0
+  initialOrientation: 2
 --- !u!4 &685753478
 Transform:
   m_ObjectHideFlags: 0
@@ -727,8 +745,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualRoot: {fileID: 43487303}
   characterLookConfiguration: {fileID: 11400000, guid: defa377fe476c484c84473554bc8608f, type: 2}
-  initialState: 0
-  initialOrientation: 0
 --- !u!70 &685753480
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

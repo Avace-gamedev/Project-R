@@ -2,6 +2,7 @@
 {
     public enum InputType
     {
-        Move
+        Move,
+        CameraZoom
     }
 }

@@ -18,13 +18,10 @@ namespace Characters
         private static Player _player;
 
         [RegisterInputCallback(InputType.Move)]
-        public static void OnMove(InputAction.CallbackContext context)
+        public static void OnMove(MoveInput input)
         {
             GetPlayerComponentsIfNecessary();
-            
-            Vector2 direction = context.ReadValue<Vector2>();
-
-            _player.Move(direction);
+            _player.Move(input.Value);
         }
 
         private static void GetPlayerComponentsIfNecessary()
