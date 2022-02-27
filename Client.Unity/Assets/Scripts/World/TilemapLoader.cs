@@ -106,7 +106,6 @@ namespace World
 
         public Vector3 Convert(Vector2Int cell)
         {
-            Debug.Log(cell);
             return _grid.CellToWorld((Vector3Int)cell);
         }
 

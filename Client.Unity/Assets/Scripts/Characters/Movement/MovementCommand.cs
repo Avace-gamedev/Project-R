@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Characters.Movement
 {
@@ -6,6 +7,16 @@ namespace Characters.Movement
     {
         public MovementCommandType Type { get; private set; }
         public Vector2 Parameter { get; private set; }
+
+        public Vector2 GetDirection(Vector2 currentPosition)
+        {
+            return Type switch
+            {
+                MovementCommandType.Direction => Parameter,
+                MovementCommandType.TargetPosition => Parameter - currentPosition,
+                _ => throw new InvalidOperationException($"Unknown movement command type {Type.ToString()}, NOT executing command")
+            };
+        }
 
         public static MovementCommand Direction(Vector2 direction)
         {
@@ -15,7 +26,7 @@ namespace Characters.Movement
                 Parameter = direction,
             };
         }
-        
+
         public static MovementCommand TargetPosition(Vector2 position)
         {
             return new MovementCommand
