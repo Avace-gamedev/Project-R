@@ -15,7 +15,7 @@ namespace Tests.Utils
                 throw new FileNotFoundException($"Could not find {path}");
             }
 #else
-        path.Should().Match(s => File.Exists(s));
+            path.Should().Match(s => File.Exists(s));
 #endif
 
             string content = File.ReadAllText(path);
@@ -27,12 +27,17 @@ namespace Tests.Utils
 
         public static void ShouldBeEquivalentToDump(this object obj, string dump)
         {
-            Serialize(obj).Should().Be(dump);
+            Normalize(Serialize(obj)).Should().Be(Normalize(dump));
         }
 
         private static string Serialize(object obj)
         {
             return JsonConvert.SerializeObject(obj, Formatting.Indented);
+        }
+
+        private static string Normalize(string dump)
+        {
+            return dump.Replace(" ", "").Replace("\r", "").Replace("\n", "");
         }
     }
 }
