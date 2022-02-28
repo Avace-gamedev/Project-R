@@ -19,6 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Backend\Backend.csproj" />
         <ProjectReference Include="..\Tests.Utils\Tests.Utils.csproj" />
     </ItemGroup>
 
