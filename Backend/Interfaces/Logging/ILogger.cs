@@ -1,9 +1,10 @@
-﻿namespace Avace.Backend.Interfaces.Logging;
-
-public interface ILogger
+﻿namespace Avace.Backend.Interfaces.Logging
 {
-    void Debug(string message);
-    void Info(string message);
-    void Warn(string message);
-    void Error(string message);
+    public interface ILogger
+    {
+        void Debug(string message);
+        void Info(string message);
+        void Warn(string message);
+        void Error(string message);
+    }
 }

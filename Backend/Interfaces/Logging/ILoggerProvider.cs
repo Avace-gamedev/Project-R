@@ -1,6 +1,7 @@
-﻿namespace Avace.Backend.Interfaces.Logging;
-
-public interface ILoggerProvider
+﻿namespace Avace.Backend.Interfaces.Logging
 {
-    ILogger GetLogger(string name);
+    public interface ILoggerProvider
+    {
+        ILogger GetLogger(string name);
+    }
 }

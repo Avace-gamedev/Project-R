@@ -1,6 +1,7 @@
-namespace Avace.Backend.Interfaces.Map;
-
-public interface IMapProvider
+namespace Avace.Backend.Interfaces.Map
 {
-    IMap Get();
+    public interface IMapProvider
+    {
+        IMap Get();
+    }
 }

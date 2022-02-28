@@ -1,13 +1,14 @@
-namespace Avace.Backend.Interfaces.Math;
-
-public struct Vector2Int
+namespace Avace.Backend.Interfaces.Math
 {
-    public int X { get; private set; }
-    public int Y { get; private set; }
-    
-    public Vector2Int(int x, int y)
+    public struct Vector2Int
     {
-        X = x;
-        Y = y;
+        public int X { get; private set; }
+        public int Y { get; private set; }
+    
+        public Vector2Int(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
     }
 }
