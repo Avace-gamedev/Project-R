@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="3" height="3" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="2">
+ <tileset firstgid="1" source="tilemap.tsx"/>
+ <layer id="1" name="layer1" width="3" height="3">
+  <properties>
+   <property name="layer-order" type="int" value="0"/>
+  </properties>
+  <data encoding="csv">
+30,81,81,
+78,36,5,
+73,10,1
+</data>
+ </layer>
+ <layer id="2" name="layer2" width="3" height="3">
+  <properties>
+   <property name="collision" type="bool" value="true"/>
+   <property name="layer-order" type="int" value="1"/>
+  </properties>
+  <data encoding="csv">
+20,21,22,
+29,30,31,
+0,0,0
+</data>
+ </layer>
+ <objectgroup id="3" name="objects">
+  <object id="1" name="player" x="43.8222" y="49.7087">
+   <point/>
+  </object>
+ </objectgroup>
+</map>
