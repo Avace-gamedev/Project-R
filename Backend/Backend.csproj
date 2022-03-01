@@ -4,7 +4,7 @@
         <TargetFramework>net48</TargetFramework>
         <AssemblyName>Avace.Backend</AssemblyName>
         <RootNamespace>Avace.Backend</RootNamespace>
-        <LangVersion>10</LangVersion>
+        <LangVersion>8</LangVersion>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 

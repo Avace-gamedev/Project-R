@@ -2,36 +2,42 @@ using System.IO;
 using FluentAssertions;
 using Newtonsoft.Json;
 
-namespace Tests.Utils;
-
-public static class DumpComparer
+namespace Tests.Utils
 {
-    public static void ShouldBeEquivalentToDumpFile(this object obj, string path)
+    public static class DumpComparer
     {
-#if DEBUG
-        if (!File.Exists(path))
+        public static void ShouldBeEquivalentToDumpFile(this object obj, string path)
         {
-            File.WriteAllText(path, Serialize(obj));
-            throw new FileNotFoundException($"Could not find {path}");
-        }
-#else
-        path.Should().Match(s => File.Exists(s));
-#endif
-
-        string content = File.ReadAllText(path);
 #if DEBUG
-        File.WriteAllText(path, Serialize(obj));
+            if (!File.Exists(path))
+            {
+                File.WriteAllText(path, Serialize(obj));
+                throw new FileNotFoundException($"Could not find {path}");
+            }
+#else
+            path.Should().Match(s => File.Exists(s));
 #endif
-        obj.ShouldBeEquivalentToDump(content);
-    }
 
-    public static void ShouldBeEquivalentToDump(this object obj, string dump)
-    {
-        Serialize(obj).Should().Be(dump);
-    }
+            string content = File.ReadAllText(path);
+#if DEBUG
+            File.WriteAllText(path, Serialize(obj));
+#endif
+            obj.ShouldBeEquivalentToDump(content);
+        }
 
-    private static string Serialize(object obj)
-    {
-        return JsonConvert.SerializeObject(obj, Formatting.Indented);
+        public static void ShouldBeEquivalentToDump(this object obj, string dump)
+        {
+            Normalize(Serialize(obj)).Should().Be(Normalize(dump));
+        }
+
+        private static string Serialize(object obj)
+        {
+            return JsonConvert.SerializeObject(obj, Formatting.Indented);
+        }
+
+        private static string Normalize(string dump)
+        {
+            return dump.Replace(" ", "").Replace("\r", "").Replace("\n", "");
+        }
     }
 }

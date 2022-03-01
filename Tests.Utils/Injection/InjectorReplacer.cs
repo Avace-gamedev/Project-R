@@ -2,28 +2,29 @@ using System;
 using System.Linq;
 using Avace.Backend.Kernel.Injection;
 
-namespace Tests.Utils.Injection;
-
-public class InjectorReplacer<T> : IDisposable
+namespace Tests.Utils.Injection
 {
-    private readonly T[] _oldValues;
-
-    public InjectorReplacer(T replacementValue, params T[] additionalValues)
-        : this(new[] {replacementValue}.Concat(additionalValues).ToArray())
+    public class InjectorReplacer<T> : IDisposable
     {
-    }
+        private readonly T[] _oldValues;
 
-    protected InjectorReplacer(params T[] values)
-    {
-        _oldValues = Injector.GetAll<T>().ToArray();
-        Injector.RemoveAll<T>();
-        Injector.Bind(values);
-    }
+        public InjectorReplacer(T replacementValue, params T[] additionalValues)
+            : this(new[] {replacementValue}.Concat(additionalValues).ToArray())
+        {
+        }
 
-    public void Dispose()
-    {
-        Injector.RemoveAll<T>();
-        Injector.Bind(_oldValues);
-        GC.SuppressFinalize(this);
+        protected InjectorReplacer(params T[] values)
+        {
+            _oldValues = Injector.GetAll<T>().ToArray();
+            Injector.RemoveAll<T>();
+            Injector.Bind(values);
+        }
+
+        public void Dispose()
+        {
+            Injector.RemoveAll<T>();
+            Injector.Bind(_oldValues);
+            GC.SuppressFinalize(this);
+        }
     }
 }

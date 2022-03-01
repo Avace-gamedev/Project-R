@@ -1,11 +1,12 @@
-namespace Avace.Backend.Utils;
-
-public static class Ressources
+namespace Avace.Backend.Utils
 {
-    public const string Path = "../Ressources";
-
-    public static string MakePath(string path)
+    public static class Ressources
     {
-        return System.IO.Path.GetFullPath(System.IO.Path.Combine(Path, path));
+        public const string Path = "../Ressources";
+
+        public static string MakePath(string path)
+        {
+            return System.IO.Path.GetFullPath(System.IO.Path.Combine(Path, path));
+        }
     }
 }
