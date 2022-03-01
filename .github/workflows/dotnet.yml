@@ -24,4 +24,4 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Set success status
-      run: "curl -X POST -H \"Accept: application/vnd.github.v3+json\" https://api.github.com/repos/Avace-gamedev/Project-R/statuses/${{github.sha}} -d '{\"state\":\"success\", \"description\": \"Backend build and tests passed.\"}'"
+      run: "curl -X POST -H \"Accept: application/vnd.github.v3+json\" https://api.github.com/repos/${{github.repository}}/statuses/${{github.sha}} -d '{\"state\":\"success\", \"description\": \"Backend build and tests passed.\"}'"
