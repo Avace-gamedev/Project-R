@@ -1,12 +1,13 @@
 using Avace.Backend.Interfaces.Map;
 using Avace.Backend.Utils;
 
-namespace Avace.Backend.Map;
-
-internal class DevMapProvider : IMapProvider
+namespace Avace.Backend.Map
 {
-    public IMap Get()
+    internal class DevMapProvider : IMapProvider
     {
-        return TiledMap.FromPath(Ressources.MakePath("Maps/Test/test.tmx"));
+        public IMap Get()
+        {
+            return TiledMap.FromPath(Ressources.MakePath("Maps/Test/test.tmx"));
+        }
     }
 }

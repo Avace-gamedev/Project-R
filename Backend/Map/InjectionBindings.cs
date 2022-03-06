@@ -1,12 +1,13 @@
 using Avace.Backend.Interfaces.Map;
 using Ninject.Modules;
 
-namespace Avace.Backend.Map;
-
-public class InjectionBindings : NinjectModule
+namespace Avace.Backend.Map
 {
-    public override void Load()
+    public class InjectionBindings : NinjectModule
     {
-        Bind<IMapProvider>().ToConstant(new DevMapProvider());
+        public override void Load()
+        {
+            Bind<IMapProvider>().ToConstant(new DevMapProvider());
+        }
     }
 }

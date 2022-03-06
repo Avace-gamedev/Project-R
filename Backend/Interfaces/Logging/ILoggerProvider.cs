@@ -1,4 +1,4 @@
-﻿namespace Avace.Backend.Interfaces.Logging;
+namespace Avace.Backend.Interfaces.Logging;
 
 public interface ILoggerProvider
 {
