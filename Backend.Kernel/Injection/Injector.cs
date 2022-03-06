@@ -4,100 +4,113 @@ using System.Linq;
 using Ninject;
 using Ninject.Planning.Bindings;
 
-namespace Avace.Backend.Kernel.Injection;
-
-public static class Injector
+namespace Avace.Backend.Kernel.Injection
 {
-    private static IKernel? _kernel;
-
-    /// <summary>
-    /// Initialize dependency injection. This MUST be called before any other method.
-    /// </summary>
-    public static void Initialize()
+    public static class Injector
     {
-        _kernel = new StandardKernel();
-        _kernel.Load(AppDomain.CurrentDomain.GetAssemblies());
-    }
+        private static IKernel? _kernel;
 
-    /// <summary>
-    /// Get service that has been bound to <c>T</c> last.
-    /// </summary>
-    public static T Get<T>()
-    {
-        InitializeKernelIfNecessary();
-        return _kernel!.Get<T>();
-    }
-
-    /// <summary>
-    /// Get all service that have been bound to <c>T</c>.
-    /// </summary>
-    public static IEnumerable<T> GetAll<T>()
-    {
-        InitializeKernelIfNecessary();
-        return _kernel!.GetAll<T>();
-    }
-
-    /// <summary>
-    /// Get service that has been bound to <c>T</c> last. Return null if no service is found.
-    /// </summary>
-    public static T TryGet<T>()
-    {
-        InitializeKernelIfNecessary();
-        return _kernel!.TryGet<T>();
-    }
-
-    /// <summary>
-    /// Bind service at runtime.
-    /// </summary>
-    public static void Bind<TInterface, TType>() where TType : TInterface
-    {
-        InitializeKernelIfNecessary();
-        _kernel!.Bind<TInterface>().To<TType>();
-    }
-
-    /// <summary>
-    /// Bind a type to a specific value.
-    /// </summary>
-    public static void BindSingleton<TType>(TType singleton)
-    {
-        InitializeKernelIfNecessary();
-        if (Any<TType>())
+        /// <summary>
+        /// Initialize dependency injection. This MUST be called before any other method.
+        /// </summary>
+        public static void Initialize()
         {
-            RemoveAll<TType>();
+            _kernel = new StandardKernel();
+            _kernel.Load(AppDomain.CurrentDomain.GetAssemblies());
         }
 
-        _kernel!.Bind<TType>().ToConstant(singleton);
-    }
-
-    private static bool Any<TType>()
-    {
-        InitializeKernelIfNecessary();
-        return _kernel!.GetBindings(typeof(TType)).Any();
-    }
-
-    public static void RemoveAll<TType>()
-    {
-        InitializeKernelIfNecessary();
-        foreach (IBinding binding in _kernel!.GetBindings(typeof(TType)))
+        /// <summary>
+        /// Get service that has been bound to <c>T</c> last.
+        /// </summary>
+        public static T Get<T>()
         {
-            _kernel.RemoveBinding(binding);
+            InitializeKernelIfNecessary();
+            return _kernel!.Get<T>();
         }
-    }
-    
-    public static void RemoveAll(Type type)
-    {
-        InitializeKernelIfNecessary();
-        foreach (IBinding binding in _kernel!.GetBindings(type))
-        {
-            _kernel.RemoveBinding(binding);
-        }
-    }
 
-    private static void InitializeKernelIfNecessary()
-    {
-        if (_kernel == null)
+        /// <summary>
+        /// Get all service that have been bound to <c>T</c>.
+        /// </summary>
+        public static IEnumerable<T> GetAll<T>()
         {
-            Initialize();
+            InitializeKernelIfNecessary();
+            return _kernel!.GetAll<T>();
+        }
+
+        /// <summary>
+        /// Get service that has been bound to <c>T</c> last. Return null if no service is found.
+        /// </summary>
+        public static T TryGet<T>()
+        {
+            InitializeKernelIfNecessary();
+            return _kernel!.TryGet<T>();
+        }
+
+        /// <summary>
+        /// Bind service at runtime.
+        /// </summary>
+        public static void Bind<TInterface, TType>() where TType : TInterface
+        {
+            InitializeKernelIfNecessary();
+            _kernel!.Bind<TInterface>().To<TType>();
+        }
+        
+        /// <summary>
+        /// Bind a type to multiple values.
+        /// </summary>
+        public static void Bind<TType>(params TType[] services)
+        {
+            InitializeKernelIfNecessary();
+            foreach (TType service in services)
+            {
+                _kernel!.Bind<TType>().ToConstant(service);
+            }
+        }
+
+        /// <summary>
+        /// Bind a type to a specific value. Any previous binding of TType will be removed.
+        /// </summary>
+        public static void BindSingleton<TType>(TType singleton)
+        {
+            InitializeKernelIfNecessary();
+            if (Any<TType>())
+            {
+                RemoveAll<TType>();
+            }
+
+            _kernel!.Bind<TType>().ToConstant(singleton);
+        }
+
+        private static bool Any<TType>()
+        {
+            InitializeKernelIfNecessary();
+            return _kernel!.GetBindings(typeof(TType)).Any();
+        }
+
+        public static void RemoveAll<TType>()
+        {
+            InitializeKernelIfNecessary();
+            foreach (IBinding binding in _kernel!.GetBindings(typeof(TType)))
+            {
+                _kernel.RemoveBinding(binding);
+            }
+        }
+
+        public static void RemoveAll(Type type)
+        {
+            InitializeKernelIfNecessary();
+            foreach (IBinding binding in _kernel!.GetBindings(type))
+            {
+                _kernel.RemoveBinding(binding);
+            }
+        }
+
+        private static void InitializeKernelIfNecessary()
+        {
+            if (_kernel == null)
+            {
+                Initialize();
+            }
         }
     }
 }
