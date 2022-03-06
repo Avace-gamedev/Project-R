@@ -8,8 +8,7 @@ namespace Avace.Backend.Interfaces.Map
         int Width { get; }
         int Height { get; }
         IEnumerable<MapLayer> Layers { get; }
+        IEnumerable<MapArea> Areas { get; }
         Vector2Int PlayerSpawn { get; }
-
-        int? GetTerrainAt(int x, int y, string layer);
     }
 }

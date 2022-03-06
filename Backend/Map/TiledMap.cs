@@ -12,55 +12,23 @@ using Avace.Backend.Kernel.Injection;
 
 namespace Avace.Backend.Map
 {
-    internal class TiledMap : IMap
+    internal static class TiledMapBuilder
     {
-        private static readonly ICustomLogger Log = Injector.Get<ICustomLoggerProvider>().GetLogger(MethodBase.GetCurrentMethod().Name);
-
-        public TiledMap(int width, int height)
-        {
-            Width = width;
-            Height = height;
-        }
-
-        public List<MapLayer> Layers { get; } = new List<MapLayer>();
-        public Dictionary<string, int?[]> LayerTiles { get; } = new Dictionary<string, int?[]>();
-
-        public int Width { get; private set; }
-        public int Height { get; private set; }
-        IEnumerable<MapLayer> IMap.Layers => Layers;
-        public Vector2Int PlayerSpawn { get; private set; }
-
-        public int? GetTerrainAt(int x, int y, string layer)
-        {
-            int?[] layerTiles = GetLayer(layer);
-            int index = CoordsToIndex(x, y);
-
-            return layerTiles[index];
-        }
-
-        private int?[] GetLayer(string layer)
-        {
-            if (!LayerTiles.ContainsKey(layer)) throw new InvalidOperationException($"Could not find layer {layer}");
-
-            return LayerTiles[layer];
-        }
-
-        private int CoordsToIndex(int x, int y)
-        {
-            return x + y * Width;
-        }
+        private static readonly ICustomLogger Log = Injector.Get<ICustomLoggerProvider>()
+            .GetLogger(MethodBase.GetCurrentMethod().Name);
 
         /// <summary>
         ///     Create a map from a tiled file (.tmx)
         /// </summary>
         /// <param name="path">Path should be absolute or relative to executing assembly.</param>
         /// <returns></returns>
-        public static TiledMap FromPath(string path)
+        public static Map FromPath(string path)
         {
             if (!File.Exists(path)) throw MakeParseException(path, "File not found");
 
             string extension = Path.GetExtension(path);
-            if (extension == "tmx") throw MakeParseException(path, $"File is not a valid Tiled map, expected a .tmx file but found .{extension}");
+            if (extension == "tmx")
+                throw MakeParseException(path, $"File is not a valid Tiled map, expected a .tmx file but found .{extension}");
 
             XDocument doc = XDocument.Load(path);
 
@@ -73,15 +41,17 @@ namespace Avace.Backend.Map
                 int tileWidth = GetAttributeValueAsInt(doc.Root, "tilewidth");
                 int tileHeight = GetAttributeValueAsInt(doc.Root, "tileheight");
 
-                TiledMap result = new TiledMap(width, height);
+                Map result = new Map(width, height);
 
-                XElement tileset = doc.Root.Element("tileset") ?? throw new InvalidOperationException("Could not find tag <tileset>");
+                XElement tileset = doc.Root.Element("tileset")
+                                   ?? throw new InvalidOperationException("Could not find tag <tileset>");
 
                 int firstGid = GetAttributeValueAsInt(tileset, "firstgid");
 
                 foreach (XElement layer in doc.Root.Elements("layer")) ParseLayer(layer, result, firstGid);
 
-                foreach (XElement objectGroup in doc.Root.Elements("objectgroup")) ParseObjectGroup(objectGroup, result, tileWidth, tileHeight);
+                foreach (XElement objectGroup in doc.Root.Elements("objectgroup"))
+                    ParseObjectGroup(objectGroup, result, tileWidth, tileHeight);
 
                 return result;
             }
@@ -91,11 +61,12 @@ namespace Avace.Backend.Map
             }
         }
 
-        private static void ParseLayer(XElement layer, TiledMap result, int firstGid)
+        private static void ParseLayer(XElement layer, Map result, int firstGid)
         {
             string layerName = GetAttributeValue(layer, "name");
 
-            if (result.Layers.Any(l => l.Name == layerName)) throw new InvalidOperationException($"Layer with name {layerName} already exists");
+            if (result.LayersInternal.Any(l => l.Name == layerName))
+                throw new InvalidOperationException($"Layer with name {layerName} already exists");
 
             int layerOrder = GetPropertyValueAsInt(layer, "layer-order");
             bool collision = GetPropertyValueAsBool(layer, "collision");
@@ -110,31 +81,76 @@ namespace Avace.Backend.Map
                 .Select(i => i < firstGid ? (int?)null : i - firstGid)
                 .ToArray();
 
-            result.Layers.Add(new MapLayer(layerName, layerOrder, collision));
-            result.LayerTiles.Add(layerName, tiles);
+            result.LayersInternal.Add(new MapLayer(layerName, layerOrder, tiles, collision));
         }
 
-        private static void ParseObjectGroup(XElement objectGroup, TiledMap result, int tileWidth, int tileHeight)
+        private static void ParseObjectGroup(XElement objectGroup, Map result, int tileWidth, int tileHeight)
         {
             foreach (XElement obj in objectGroup.Elements("object"))
             {
-                string? name = TryGetAttributeValue(obj, "name");
-                switch (name)
+                string? type = TryGetAttributeValue(obj, "type");
+                switch (type)
                 {
-                    case "player":
+                    case "player_spawn":
                         double x = GetAttributeValueAsDouble(obj, "x");
                         double y = GetAttributeValueAsDouble(obj, "y");
 
                         result.PlayerSpawn = new Vector2Int((int)(x / tileWidth), (int)(y / tileHeight));
                         break;
+                    case "area":
+                        ParseArea(result, obj);
+                        break;
                     case null:
-                        Log.Warn($"Found object with no name attribute: {obj}");
+                        Log.Warn($"Found object with no type attribute: {obj}");
                         break;
                     default:
-                        Log.Warn($"Object with name {name} ignored.");
+                        Log.Warn($"Object with type {type} ignored.");
                         break;
                 }
             }
+        }
+
+        private static void ParseArea(Map result, XElement obj)
+        {
+            MapArea area = new MapArea
+            {
+                Name = GetPropertyValue(obj, "area-name"),
+                MaxGroups = GetPropertyValueAsInt(obj, "area-max-groups"),
+            };
+
+            XElement? polygon = obj.Element("polygon");
+            if (polygon == null)
+            {
+                Log.Error($"Ignoring area {area.Name} because it doesn't define a shape.");
+                return;
+            }
+
+            string polygonStr = GetAttributeValue(polygon, "points");
+
+            List<Vector2Int> polygonVec = new List<Vector2Int>();
+
+            foreach (string pointStr in polygonStr.Split(' '))
+            {
+                string[] coords = pointStr.Split(',');
+                if (coords.Length != 2)
+                {
+                    Log.Error($"Ignoring area {area.Name} because polygon string is invalid: {polygonStr}");
+                    return;
+                }
+
+                string xStr = coords[0].Trim();
+                string yStr = coords[1].Trim();
+
+                double xDouble = Convert.ToDouble(xStr, CultureInfo.InvariantCulture);
+                double yDouble = Convert.ToDouble(yStr, CultureInfo.InvariantCulture);
+
+                Vector2Int point = new Vector2Int((int)xDouble, (int)yDouble);
+                polygonVec.Add(point);
+            }
+
+            area.Shape = polygonVec.ToArray();
+
+            result.AreasInternal.Add(area);
         }
 
         private static string GetChildContent(XElement element, string childName)
@@ -158,7 +174,8 @@ namespace Avace.Backend.Map
         {
             string attrStr = GetAttributeValue(element, attribute);
 
-            if (!int.TryParse(attrStr, out int attrInt)) throw new InvalidOperationException($"Could not convert value to int: {attrStr}");
+            if (!int.TryParse(attrStr, out int attrInt))
+                throw new InvalidOperationException($"Could not convert value to int: {attrStr}");
 
             return attrInt;
         }
@@ -194,7 +211,8 @@ namespace Avace.Backend.Map
         {
             string propStr = GetPropertyValue(element, property);
 
-            if (!int.TryParse(propStr, out int propInt)) throw new InvalidOperationException($"Could not convert value to int: {propStr}");
+            if (!int.TryParse(propStr, out int propInt))
+                throw new InvalidOperationException($"Could not convert value to int: {propStr}");
 
             return propInt;
         }

@@ -10,7 +10,7 @@ namespace Tests.Backend
         [TestMethod]
         public void ParseTiledMap()
         {
-            TiledMap.FromPath(TestUtils.GetTestFile("map.tmx")).ShouldBeEquivalentToDumpFile(TestUtils.GetTestFile("map.json"));
+            TiledMapBuilder.FromPath(TestUtils.GetTestFile("map.tmx")).ShouldBeEquivalentToDumpFile(TestUtils.GetTestFile("map.json"));
         }
     }
 }
