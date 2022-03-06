@@ -7,7 +7,7 @@ namespace Avace.Backend.Map
     {
         public IMap Get()
         {
-            return TiledMap.FromPath(Ressources.MakePath("Maps/Test/test.tmx"));
+            return TiledMapBuilder.FromPath(Ressources.MakePath("Maps/Test/test.tmx"));
         }
     }
 }
