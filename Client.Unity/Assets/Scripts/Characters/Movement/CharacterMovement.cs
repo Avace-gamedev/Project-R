@@ -1,5 +1,4 @@
-﻿using System;
-using Characters.Utils;
+﻿using Characters.Utils;
 using Configuration.Character.Movement;
 using Misc;
 using UnityEngine;

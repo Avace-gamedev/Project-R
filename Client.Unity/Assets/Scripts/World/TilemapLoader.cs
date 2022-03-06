@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Avace.Backend.Interfaces.Logging;
 using Avace.Backend.Interfaces.Map;
 using Avace.Backend.Kernel.Injection;
 using Configuration;

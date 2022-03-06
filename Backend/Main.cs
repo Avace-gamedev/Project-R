@@ -23,10 +23,7 @@ namespace Avace.Backend
         {
             string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
                          ?? throw new InvalidOperationException("Could not locate executing assembly");
-            foreach (string assemblyPath in Directory.EnumerateFiles(dir, "Avace*.dll"))
-            {
-                Assembly.LoadFile(assemblyPath);
-            }
+            foreach (string assemblyPath in Directory.EnumerateFiles(dir, "Avace*.dll")) Assembly.LoadFile(assemblyPath);
         }
     }
 }

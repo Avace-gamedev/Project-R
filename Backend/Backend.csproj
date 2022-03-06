@@ -9,19 +9,19 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <OutputPath>../bin/Debug</OutputPath>
+        <OutputPath>../bin/Debug</OutputPath>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <OutputPath>../bin/Release</OutputPath>
+        <OutputPath>../bin/Release</OutputPath>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Backend.Kernel\Backend.Kernel.csproj" />
+        <ProjectReference Include="..\Backend.Kernel\Backend.Kernel.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Ninject" Version="3.3.4" />
-      <PackageReference Include="StronglyTypedId" Version="0.2.1" />
+        <PackageReference Include="Ninject" Version="3.3.4"/>
+        <PackageReference Include="StronglyTypedId" Version="0.2.1"/>
     </ItemGroup>
 </Project>

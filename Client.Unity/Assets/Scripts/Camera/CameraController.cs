@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
-using Avace.Backend.Interfaces.Logging;
 using Avace.Backend.Kernel.Injection;
 using Cinemachine;
 using Input;

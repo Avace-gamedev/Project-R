@@ -1,4 +1,3 @@
-using Characters;
 using Characters.Enums;
 using UnityEngine;
 

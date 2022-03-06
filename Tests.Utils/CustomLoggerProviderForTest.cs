@@ -4,9 +4,7 @@ namespace Tests.Utils
 {
     public class CustomLoggerProviderForTest : ICustomLoggerProvider
     {
-        private ICustomLogger Logger { get; }
-
-        public CustomLoggerProviderForTest(): this(new LoggerForTest())
+        public CustomLoggerProviderForTest() : this(new LoggerForTest())
         {
         }
 
@@ -14,6 +12,8 @@ namespace Tests.Utils
         {
             Logger = logger;
         }
+
+        private ICustomLogger Logger { get; }
 
         public ICustomLogger GetLogger(string name)
         {

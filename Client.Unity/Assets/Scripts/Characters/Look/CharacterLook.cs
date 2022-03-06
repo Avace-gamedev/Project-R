@@ -1,7 +1,4 @@
 using System;
-using System.Reflection;
-using Avace.Backend.Interfaces.Logging;
-using Avace.Backend.Kernel.Injection;
 using Characters.Enums;
 using Characters.Utils;
 using Configuration.Character.Look;

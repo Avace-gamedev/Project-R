@@ -1,20 +1,15 @@
 {
-  "Width": 3,
   "Height": 3,
-  "PlayerSpawn": {
-    "X": 1,
-    "Y": 1
-  },
   "Layers": [
     {
+      "Collision": false,
       "Name": "layer1",
-      "Order": 0,
-      "Collision": false
+      "Order": 0
     },
     {
+      "Collision": true,
       "Name": "layer2",
-      "Order": 1,
-      "Collision": true
+      "Order": 1
     }
   ],
   "LayerTiles": {
@@ -40,5 +35,10 @@
       null,
       null
     ]
-  }
+  },
+  "PlayerSpawn": {
+    "X": 1,
+    "Y": 1
+  },
+  "Width": 3
 }

@@ -9,7 +9,7 @@ namespace Tests.Utils.Injection
         private readonly T[] _oldValues;
 
         public InjectorReplacer(T replacementValue, params T[] additionalValues)
-            : this(new[] {replacementValue}.Concat(additionalValues).ToArray())
+            : this(new[] { replacementValue }.Concat(additionalValues).ToArray())
         {
         }
 
