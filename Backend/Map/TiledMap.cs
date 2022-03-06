@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 using System.Reflection;
 using System.Xml.Linq;
 using Avace.Backend.Interfaces.Logging;
@@ -15,7 +14,7 @@ namespace Avace.Backend.Map
 {
     internal class TiledMap : IMap
     {
-        private static readonly ILogger Log = Injector.Get<ILoggerProvider>().GetLogger(MethodBase.GetCurrentMethod().Name);
+        private static readonly ICustomLogger Log = Injector.Get<ICustomLoggerProvider>().GetLogger(MethodBase.GetCurrentMethod().Name);
 
         public int Width { get; private set; }
         public int Height { get; private set; }

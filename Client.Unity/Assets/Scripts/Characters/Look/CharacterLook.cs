@@ -8,16 +8,13 @@ using Configuration.Character.Look;
 using Extensions;
 using Misc;
 using UnityEngine;
-using ILogger = Avace.Backend.Interfaces.Logging.ILogger;
 
 namespace Characters.Look
 {
-    public class CharacterLook : MonoBehaviour
+    public class CharacterLook : CustomMonoBehaviour
     {
         private static readonly int TileIndexShaderProperty = Shader.PropertyToID("TileIndex");
         private static readonly int TileSizeShaderProperty = Shader.PropertyToID("TileSize");
-
-        private static ILogger _log;
 
         public GameObject visualRoot;
 
@@ -35,17 +32,15 @@ namespace Characters.Look
 
         private void Start()
         {
-            _log = Injector.Get<ILoggerProvider>().GetLogger(MethodBase.GetCurrentMethod().DeclaringType?.Name!);
-
             if (characterLookConfiguration == null)
             {
-                _log.Warn($"No {typeof(CharacterLookConfiguration)} provided.");
+                Logger.Warn($"No {typeof(CharacterLookConfiguration)} provided.");
                 enabled = false;
                 return;
             }
 
             _character = gameObject.RequireComponent<Character>();
-            
+
             if (visualRoot == null)
             {
                 visualRoot = gameObject;
@@ -58,8 +53,16 @@ namespace Characters.Look
             Rect rect = Rect.MinMaxRect(0, 0, characterLookConfiguration.spriteSheet.width, characterLookConfiguration.spriteSheet.height);
             _renderer.sprite = Sprite.Create(characterLookConfiguration.spriteSheet, rect, characterLookConfiguration.pivot, rect.width, 0,
                 SpriteMeshType.FullRect);
-            _renderer.material = new Material(GlobalConstants.TextureMapShader);
+            _renderer.material = new Material(GlobalConstants.Get().textureMapShader);
             _renderer.material.SetVector(TileSizeShaderProperty, (Vector2)characterLookConfiguration.spriteSize);
+
+            float spriteSheetRatio = (float)characterLookConfiguration.spriteSheet.width / (float)characterLookConfiguration.spriteSheet.height;
+            float spriteRatio = (float)characterLookConfiguration.spriteSize.x / (float)characterLookConfiguration.spriteSize.y;
+
+            float scaleY = characterLookConfiguration.sizeModifier;
+            float scaleX = characterLookConfiguration.sizeModifier * spriteRatio / spriteSheetRatio;
+
+            transform.localScale = new Vector3(scaleX, scaleY, 1);
 
             UpdateState(true);
         }
@@ -70,9 +73,9 @@ namespace Characters.Look
             {
                 return;
             }
-            
+
             UpdateState();
-            
+
             if (_nextFrameTime != null && _nextFrameTime > DateTime.Now)
             {
                 return;
@@ -80,7 +83,7 @@ namespace Characters.Look
 
             if (_currentAnimationFrames.Length == 0)
             {
-                _log.Warn("Animation has no frames, will not animate this character");
+                Logger.Warn("Animation has no frames, will not animate this character");
                 return;
             }
 
@@ -97,7 +100,7 @@ namespace Characters.Look
 
             if (speedInFps == 0)
             {
-                _log.Warn("Animation speed has been set to 0, it will be ignored. 1 is used instead.");
+                Logger.Warn("Animation speed has been set to 0, it will be ignored. 1 is used instead.");
                 speedInFps = 1;
             }
 

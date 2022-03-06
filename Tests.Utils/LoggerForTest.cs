@@ -2,7 +2,7 @@ using Avace.Backend.Interfaces.Logging;
 
 namespace Tests.Utils
 {
-    public class LoggerForTest: ILogger
+    public class LoggerForTest: ICustomLogger
     {
         public void Debug(string message)
         {

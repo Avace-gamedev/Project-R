@@ -14,6 +14,10 @@ namespace Configuration.Character.Look
         [Tooltip("Position of pivot for each sprite in the sprite sheet (normalized)")]
         public Vector2 pivot = new Vector2(0.5f, 0);
 
+        [Range(0.1f, 10f)]
+        [Tooltip("Height of the character sprite, its width will be computed to match the ratio defined by spriteSize.")]
+        public float sizeModifier = 1;
+
         [Tooltip("Global multiplicator that should be applied to the speed of all the animations of this character.")]
         public float animationSpeedModifier = 1;
 

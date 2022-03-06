@@ -1,12 +1,7 @@
 ﻿using System;
 using Avace.Backend.Kernel.Injection;
-using Characters.Enums;
-using Characters.Look;
-using Characters.Movement;
 using Input;
 using Input.Attributes;
-using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Characters
 {

@@ -8,14 +8,14 @@ namespace Avace.Backend
 {
     public static class Main
     {
-        private static ILogger? _log;
+        private static ICustomLogger? _log;
 
         public static void Initialize()
         {
             LoadAllAssemblies();
             Injector.Initialize();
 
-            _log = Injector.Get<ILoggerProvider>().GetLogger(MethodBase.GetCurrentMethod().Name);
+            _log = Injector.Get<ICustomLoggerProvider>().GetLogger(MethodBase.GetCurrentMethod().Name);
             _log.Info("Initialization done.");
         }
 

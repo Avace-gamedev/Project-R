@@ -1,26 +1,31 @@
 using System;
+using System.Reflection;
+using Avace.Backend.Interfaces.Logging;
 using Avace.Backend.Kernel.Injection;
 using UnityEngine;
 
 namespace Misc
 {
-    public class GlobalConstants : MonoBehaviour
+    public class GlobalConstants : CustomMonoBehaviour
     {
-        public static GlobalConstants Instance;
+        public static GlobalConstants Instance => Injector.TryGet<GlobalConstants>();
 
-        public static Shader TextureMapShader =>
-            Instance
-                ? Instance.textureMapShader
-                : throw new InvalidOperationException("Global constants not initialized yet");
-
-        [SerializeField]
         [Tooltip("Shader that is used to display a sprite from a sprite sheet.")]
-        private Shader textureMapShader;
+        public Shader textureMapShader;
 
-        public void Awake()
+        protected override void RegisterInjectionBindings()
         {
             Injector.BindSingleton(this);
-            Instance = Injector.Get<GlobalConstants>();
+        }
+
+        protected override void UnregisterInjectionBindings()
+        {
+            Injector.RemoveAll<GlobalConstants>();
+        }
+
+        public static GlobalConstants Get()
+        {
+            return Instance ? Instance : throw new InvalidOperationException("Global constants not initialized yet");
         }
     }
 }

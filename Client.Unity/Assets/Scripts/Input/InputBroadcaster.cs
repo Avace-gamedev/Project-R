@@ -1,9 +1,10 @@
+using Misc;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Input
 {
-    public class InputBroadcaster : MonoBehaviour
+    public class InputBroadcaster : CustomMonoBehaviour
     {
         public void OnMove(InputAction.CallbackContext context)
         {
@@ -15,7 +16,6 @@ namespace Input
         {
             
             float diff = context.ReadValue<float>();
-            Debug.Log(diff);
             InputManager.Trigger(new CameraZoomInput(diff));
         }
     }

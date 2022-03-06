@@ -7,7 +7,7 @@ namespace Tests.Utils
     {
         public override void Load()
         {
-            Bind<ILoggerProvider>().To<LoggerProvider>();
+            Bind<ICustomLoggerProvider>().To<CustomLoggerProviderForTest>();
         }
     }
 }
