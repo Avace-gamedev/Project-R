@@ -2,7 +2,7 @@ using System;
 using Avace.Backend.Kernel.Injection;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tests.Utils;
+using Ninject;
 using Tests.Utils.Injection;
 
 namespace Tests.Backend.Kernel
@@ -24,7 +24,7 @@ namespace Tests.Backend.Kernel
         public void ShouldFailToGetNonExistentService()
         {
             Action get = () => Injector.Get<IServiceForInjectorTest>();
-            get.Should().Throw<Ninject.ActivationException>();
+            get.Should().Throw<ActivationException>();
         }
 
         [TestMethod]
@@ -51,7 +51,7 @@ namespace Tests.Backend.Kernel
             using (new InjectorReplacer<IServiceForInjectorTest>(serviceForTest1, serviceForTest2))
             {
                 Injector.GetAll<IServiceForInjectorTest>().Should()
-                    .BeEquivalentTo(new[] {serviceForTest1, serviceForTest2});
+                    .BeEquivalentTo(new[] { serviceForTest1, serviceForTest2 });
             }
         }
 

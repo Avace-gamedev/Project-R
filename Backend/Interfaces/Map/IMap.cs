@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Numerics;
 using Avace.Backend.Interfaces.Math;
-using Avace.Backend.Map;
 
 namespace Avace.Backend.Interfaces.Map
 {

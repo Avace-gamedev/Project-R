@@ -3,7 +3,7 @@ using Ninject.Modules;
 
 namespace Tests.Utils
 {
-    public class InjectionBindings: NinjectModule
+    public class InjectionBindings : NinjectModule
     {
         public override void Load()
         {

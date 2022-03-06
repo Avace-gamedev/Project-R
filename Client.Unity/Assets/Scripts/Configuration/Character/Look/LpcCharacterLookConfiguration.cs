@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Characters;
 using Characters.Enums;
 using UnityEngine;
 

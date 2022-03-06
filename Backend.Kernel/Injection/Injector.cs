@@ -11,7 +11,7 @@ namespace Avace.Backend.Kernel.Injection
         private static IKernel? _kernel;
 
         /// <summary>
-        /// Initialize dependency injection. This MUST be called before any other method.
+        ///     Initialize dependency injection. This MUST be called before any other method.
         /// </summary>
         public static void Initialize()
         {
@@ -20,7 +20,7 @@ namespace Avace.Backend.Kernel.Injection
         }
 
         /// <summary>
-        /// Get service that has been bound to <c>T</c> last.
+        ///     Get service that has been bound to <c>T</c> last.
         /// </summary>
         public static T Get<T>()
         {
@@ -29,7 +29,7 @@ namespace Avace.Backend.Kernel.Injection
         }
 
         /// <summary>
-        /// Get all service that have been bound to <c>T</c>.
+        ///     Get all service that have been bound to <c>T</c>.
         /// </summary>
         public static IEnumerable<T> GetAll<T>()
         {
@@ -38,7 +38,7 @@ namespace Avace.Backend.Kernel.Injection
         }
 
         /// <summary>
-        /// Get service that has been bound to <c>T</c> last. Return null if no service is found.
+        ///     Get service that has been bound to <c>T</c> last. Return null if no service is found.
         /// </summary>
         public static T TryGet<T>()
         {
@@ -47,36 +47,30 @@ namespace Avace.Backend.Kernel.Injection
         }
 
         /// <summary>
-        /// Bind service at runtime.
+        ///     Bind service at runtime.
         /// </summary>
         public static void Bind<TInterface, TType>() where TType : TInterface
         {
             InitializeKernelIfNecessary();
             _kernel!.Bind<TInterface>().To<TType>();
         }
-        
+
         /// <summary>
-        /// Bind a type to multiple values.
+        ///     Bind a type to multiple values.
         /// </summary>
         public static void Bind<TType>(params TType[] services)
         {
             InitializeKernelIfNecessary();
-            foreach (TType service in services)
-            {
-                _kernel!.Bind<TType>().ToConstant(service);
-            }
+            foreach (TType service in services) _kernel!.Bind<TType>().ToConstant(service);
         }
 
         /// <summary>
-        /// Bind a type to a specific value. Any previous binding of TType will be removed.
+        ///     Bind a type to a specific value. Any previous binding of TType will be removed.
         /// </summary>
         public static void BindSingleton<TType>(TType singleton)
         {
             InitializeKernelIfNecessary();
-            if (Any<TType>())
-            {
-                RemoveAll<TType>();
-            }
+            if (Any<TType>()) RemoveAll<TType>();
 
             _kernel!.Bind<TType>().ToConstant(singleton);
         }
@@ -90,27 +84,18 @@ namespace Avace.Backend.Kernel.Injection
         public static void RemoveAll<TType>()
         {
             InitializeKernelIfNecessary();
-            foreach (IBinding binding in _kernel!.GetBindings(typeof(TType)))
-            {
-                _kernel.RemoveBinding(binding);
-            }
+            foreach (IBinding binding in _kernel!.GetBindings(typeof(TType))) _kernel.RemoveBinding(binding);
         }
 
         public static void RemoveAll(Type type)
         {
             InitializeKernelIfNecessary();
-            foreach (IBinding binding in _kernel!.GetBindings(type))
-            {
-                _kernel.RemoveBinding(binding);
-            }
+            foreach (IBinding binding in _kernel!.GetBindings(type)) _kernel.RemoveBinding(binding);
         }
 
         private static void InitializeKernelIfNecessary()
         {
-            if (_kernel == null)
-            {
-                Initialize();
-            }
+            if (_kernel == null) Initialize();
         }
     }
 }
