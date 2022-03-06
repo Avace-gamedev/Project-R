@@ -4,7 +4,7 @@ namespace Logging
 {
     public class UnityLoggerProvider: ILoggerProvider
     {
-        public ILogger GetLogger(string name)
+        public ICustomLogger GetLogger(string name)
         {
             return new UnityLogger(name);
         }

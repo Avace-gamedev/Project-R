@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
+using Avace.Backend.Interfaces.Logging;
 using Avace.Backend.Kernel.Injection;
 using Cinemachine;
 using Input;
 using Input.Attributes;
+using Misc;
 using Unity.Mathematics;
 using UnityEngine;
 
 namespace Camera
 {
-    public class CameraController : MonoBehaviour
+    public class CameraController : CustomMonoBehaviour
     {
-        public static CameraController Instance;
+        public static CameraController Instance => Injector.TryGet<CameraController>();
 
         public CinemachineVirtualCamera vCam;
-        
+
         [Range(0, 5f)]
         public float zoomSpeed = 1f;
 
@@ -24,10 +27,15 @@ namespace Camera
         [Range(10f, 50f)]
         public float maxZoom = 15f;
 
-        private void Awake()
+        protected override void RegisterInjectionBindings()
         {
             Injector.BindSingleton(this);
-            Instance = Injector.Get<CameraController>();
+        }
+
+        protected override void UnregisterInjectionBindings()
+        {
+            Injector.RemoveAll<CameraController>();
+            
         }
 
         private void Start()

@@ -8,7 +8,7 @@ namespace Avace.Backend;
 
 public static class Main
 {
-    private static ILogger? _log;
+    private static ICustomLogger? _log;
 
     public static void Initialize()
     {

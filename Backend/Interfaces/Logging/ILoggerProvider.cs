@@ -2,5 +2,5 @@
 
 public interface ILoggerProvider
 {
-    ILogger GetLogger(string name);
+    ICustomLogger GetLogger(string name);
 }

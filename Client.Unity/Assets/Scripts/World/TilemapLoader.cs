@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Avace.Backend.Interfaces.Logging;
 using Avace.Backend.Interfaces.Map;
 using Avace.Backend.Kernel.Injection;
 using Configuration;
 using Extensions;
+using Misc;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -13,7 +15,7 @@ namespace World
     /// <summary>
     /// This should be attached to a grid. It will load at initialization the map provided by the bound IMapProvider.
     /// </summary>
-    public class TilemapLoader : MonoBehaviour, IPlayerStartPositionProvider, ICoordinatesConverter
+    public class TilemapLoader : CustomMonoBehaviour, IPlayerStartPositionProvider, ICoordinatesConverter
     {
         public TilemapConfiguration configuration;
         public Vector2Int PlayerStartPosition { get; private set; }
@@ -22,12 +24,20 @@ namespace World
         private Grid _grid;
         private readonly Dictionary<string, Tilemap> _tilemaps = new Dictionary<string, Tilemap>();
 
-
-        private void Awake()
+        protected override void RegisterInjectionBindings()
         {
             Injector.BindSingleton<IPlayerStartPositionProvider>(this);
             Injector.BindSingleton<ICoordinatesConverter>(this);
-            
+        }
+
+        protected override void UnregisterInjectionBindings()
+        {
+            Injector.RemoveAll<IPlayerStartPositionProvider>();
+            Injector.RemoveAll<ICoordinatesConverter>();
+        }
+
+        private void Awake()
+            {
             if (configuration == null)
             {
                 throw new InvalidOperationException($"Provided {nameof(TilemapConfiguration)} is null.");

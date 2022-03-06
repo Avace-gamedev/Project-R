@@ -1,6 +1,6 @@
 ﻿namespace Avace.Backend.Interfaces.Logging;
 
-public interface ILogger
+public interface ICustomLogger
 {
     void Debug(string message);
     void Info(string message);

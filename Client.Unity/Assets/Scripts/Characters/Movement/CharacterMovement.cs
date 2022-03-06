@@ -1,6 +1,7 @@
 ﻿using System;
 using Characters.Utils;
 using Configuration.Character.Movement;
+using Misc;
 using UnityEngine;
 
 namespace Characters.Movement
@@ -8,7 +9,7 @@ namespace Characters.Movement
     /// <summary>
     /// Moves an entity wrt. the given command
     /// </summary>
-    public class CharacterMovement : MonoBehaviour
+    public class CharacterMovement : CustomMonoBehaviour
     {
         public CharacterMovementConfiguration movementConfiguration;
 

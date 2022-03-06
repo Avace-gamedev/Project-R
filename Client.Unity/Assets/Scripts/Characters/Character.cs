@@ -6,9 +6,9 @@ using Characters.Enums;
 using Characters.Look;
 using Characters.Movement;
 using Configuration.Character;
+using Misc;
 using UnityEngine;
 using World;
-using ILogger = Avace.Backend.Interfaces.Logging.ILogger;
 
 namespace Characters
 {
@@ -17,7 +17,7 @@ namespace Characters
     /// </summary>
     [RequireComponent(typeof(CharacterMovement))]
     [RequireComponent(typeof(CharacterLook))]
-    public class Character : MonoBehaviour
+    public class Character : CustomMonoBehaviour
     {
         public CharacterConfiguration configuration;
 
@@ -35,10 +35,6 @@ namespace Characters
         public float CurrentMovementSpeed { get; private set; }
         public MovementCommand? CurrentMovementCommand { get; private set; }
 
-        // ----
-
-        protected static ILogger Log;
-
         /// <summary>
         /// Set the starting cell of the character before calling Start() 
         /// </summary>
@@ -46,7 +42,6 @@ namespace Characters
 
         protected virtual void Start()
         {
-            Log = Injector.Get<ILoggerProvider>().GetLogger(MethodBase.GetCurrentMethod().DeclaringType?.Name!);
             transform.position = Injector.Get<ICoordinatesConverter>().Convert(StartPosition);
 
             State = initialState;

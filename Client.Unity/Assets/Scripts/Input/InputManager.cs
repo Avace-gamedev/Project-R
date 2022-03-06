@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Input.Attributes;
-using UnityEngine.InputSystem;
 
 namespace Input
 {
@@ -18,10 +17,17 @@ namespace Input
         /// These callbacks are set by Register
         /// </summary>
         private static readonly Dictionary<InputType, Dictionary<InputManagerCallbackId, Action<InputValue>>> RegisteredCallbacks =
-            new
-                Dictionary<InputType, Dictionary<InputManagerCallbackId, Action<InputValue>>>();
+            new Dictionary<InputType, Dictionary<InputManagerCallbackId, Action<InputValue>>>();
 
-        public static void LoadCallbacks()
+        public static bool Initialized { get; private set; } = false;
+
+
+        static InputManager()
+        {
+            LoadCallbacks();
+        }
+
+        private static void LoadCallbacks()
         {
             foreach (MethodInfo method in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()).SelectMany(t => t.GetMethods()))
             {

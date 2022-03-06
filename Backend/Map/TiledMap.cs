@@ -15,7 +15,7 @@ namespace Avace.Backend.Map;
 
 internal class TiledMap : IMap
 {
-    private static readonly ILogger Log = Injector.Get<ILoggerProvider>().GetLogger(MethodBase.GetCurrentMethod().Name);
+    private static readonly ICustomLogger Log = Injector.Get<ILoggerProvider>().GetLogger(MethodBase.GetCurrentMethod().Name);
 
     public int Width { get; private set; }
     public int Height { get; private set; }

@@ -1,18 +1,14 @@
-using Input;
+using Misc;
 using UnityEngine;
 
 /// <summary>
 /// Main entry point for the game. This will initialize the backend during Awake.
 /// </summary>
-public class Main : MonoBehaviour
+public class Main : CustomMonoBehaviour
 {
-    static Main()
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void Initialize()
     {
-        Avace.Backend.Main.Initialize();   
-    }
-    
-    private void Awake()
-    {
-        InputManager.LoadCallbacks();
+        Avace.Backend.Main.Initialize();
     }
 }
