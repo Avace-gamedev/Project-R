@@ -32,7 +32,10 @@ namespace Tests.Utils
 
         private static string Serialize(object obj)
         {
-            return JsonConvert.SerializeObject(obj, Formatting.Indented);
+            return JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings
+            {
+                ContractResolver = new OrderedContractResolverForTest(),
+            });
         }
 
         private static string Normalize(string dump)
